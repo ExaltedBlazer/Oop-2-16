@@ -1,8 +1,8 @@
 'use strict';
 
 const Person = function (firstName, birthYear) {
-console.log(this);
-// Instance properties
+  console.log(this);
+  // Instance properties
   // let firstName;
   // let yearOfBirth;
   this.firstName = firstName;
@@ -74,8 +74,50 @@ console.log(arr.__proto__.__proto__);
 console.log(arr.length);
 
 Array.prototype.unique = function () {
-  return  [...new Set(this)];
+  return [...new Set(this)];
 };
 
 console.log(arr.unique());
 const h1 = document.querySelector('h1');
+
+// Coding Challenge #1
+
+// This is the car class
+const Car = function (make, speed) {
+  console.log(this);
+  // Instance properties
+  // let firstName;
+  // let yearOfBirth;
+  this.carName = make;
+  this.carSpeed = speed;
+
+};
+
+
+// Accelerate method
+Car.prototype.accelerate = function () {
+  this.carSpeed += 10
+  const currentSpeed = `The ${this.carName} current speed is ${this.carSpeed}mph`;
+  console.log(currentSpeed);
+};
+
+// Brake method
+Car.prototype.brake = function () {
+  this.carSpeed -= 5
+  const currentBrakeSpeed = `The ${this.carName} brake speed is ${this.carSpeed}mph`;
+  console.log(currentBrakeSpeed);
+};
+
+// Car object 1
+const ford = new Car("ford", 70)
+console.log(ford);
+ford.accelerate();
+ford.brake()
+
+// Car object 1
+const tesla = new Car("tesla", 80)
+console.log(tesla);
+
+tesla.accelerate();
+tesla.brake()
+
