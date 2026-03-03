@@ -121,7 +121,6 @@ console.log(tesla);
 
 tesla.accelerate();
 tesla.brake()
-
 */
 
 // class expression
@@ -182,6 +181,7 @@ jessica.fullName = 'Jessica Davis';
 
 const walter = new PersonCl('Walter', 1965);
 
+/*
 const account = {
   owner: 'Jonas',
   movements: [200, 530, 120, 300],
@@ -198,3 +198,65 @@ console.log(account.latest);
 
 account.latest = 50;
 console.log(account.movements);
+*/
+
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
+
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  }
+};
+
+const steven = Object.create(PersonProto);
+console.log(steven);
+steven.name = 'Steven';
+steven.birthYear = 2002;
+steven.calcAge();
+
+console.log(steven.__proto__ === PersonProto);
+
+const sarah = Object.create(PersonProto);
+sarah.init('Sarah', 1979);
+sarah.calcAge();
+
+//// Coding Challenge #2
+
+// This is the car class 
+class CarCl {
+  constructor(make, speed) {
+    this.carName = make;
+    this.carSpeed = speed;
+  }
+
+  accelerate() {
+    this.carSpeed += 10
+    const currentSpeed = `The ${this.carName} current speed is ${this.carSpeed}mph`;
+    console.log(currentSpeed);
+  };
+
+  brake() {
+    this.carSpeed -= 5
+    const currentBrakeSpeed = `The ${this.carName} brake speed is ${this.carSpeed}mph`;
+    console.log(currentBrakeSpeed);
+  };
+
+  get speedUS() {
+    return this.carSpeed / 1.6
+  }
+
+  set speedUS(speed) {
+    this.carSpeed = speed * 1.6
+  }
+}
+
+const ford = new CarCl("ford", 120)
+console.log(ford.speedUS);
+ford.accelerate();
+ford.accelerate();
+ford.brake()
+ford.speedUS = 50;
+console.log(ford);
