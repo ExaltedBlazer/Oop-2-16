@@ -121,7 +121,7 @@ console.log(tesla);
 
 tesla.accelerate();
 tesla.brake()
-*/
+
 
 // class expression
 //const PersonCl = class{}
@@ -181,7 +181,7 @@ jessica.fullName = 'Jessica Davis';
 
 const walter = new PersonCl('Walter', 1965);
 
-/*
+
 const account = {
   owner: 'Jonas',
   movements: [200, 530, 120, 300],
@@ -198,7 +198,6 @@ console.log(account.latest);
 
 account.latest = 50;
 console.log(account.movements);
-*/
 
 const PersonProto = {
   calcAge() {
@@ -260,3 +259,105 @@ ford.accelerate();
 ford.brake()
 ford.speedUS = 50;
 console.log(ford);
+
+
+// Coding Challenge #3
+
+const Car = function (make, speed) {
+  this.carName = make;
+  this.carSpeed = speed;
+
+};
+
+Car.prototype.accelerate = function () {
+  this.carSpeed += 10
+  const currentSpeed = `The ${this.carName} current speed is ${this.carSpeed}mph`;
+  console.log(currentSpeed);
+};
+
+Car.prototype.brake = function () {
+  this.carSpeed -= 5
+  const currentBrakeSpeed = `The ${this.carName} brake speed is ${this.carSpeed}mph`;
+  console.log(currentBrakeSpeed);
+};
+
+const EV = function (make, speed, charge) {
+  Car.call(this, make, speed);
+  this.charge = charge;
+};
+
+EV.prototype = Object.create(Car.prototype);
+
+EV.prototype.chargeBattery = function (chargeTo) {
+  this.charge = chargeTo;
+};
+
+EV.prototype.accelerate = function () {
+  this.carSpeed += 20;
+  this.charge--;
+  const currentSpeed = `The ${this.carName} is going at ${this.carSpeed}mph, with a charge of ${this.charge}%`;
+  console.log(currentSpeed);
+};
+
+const tesla = new EV("tesla", 120, 23);
+tesla.chargeBattery(90);
+console.log(tesla);
+tesla.accelerate();
+tesla.brake();
+*/
+
+class PersonCl {
+  constructor(fullName, birthYear) {
+    this.fName = fullName;
+    this.bYear = birthYear;
+  }
+
+  //Methods will be added to .prototype property
+  calcAge() {
+    console.log(2012 - this.bYear);
+
+  }
+
+  greet() {
+    console.log(`Hey ${this.fName}`);
+
+  }
+
+  get age() {
+    return 2012 - this.bYear
+  }
+
+  set fullName(name) {
+    console.log(name);
+    if (name.includes(' ')) this._fName = name;
+    else alert(`${name} is not a full name!`)
+  }
+
+  get fullName() {
+    return this._fName
+  }
+
+// static method
+static hey() {
+  console.log('Hey there 👋');
+  }
+}
+
+class StudentCl extends PersonCl {
+  constructor(fullName, birthYear, course) {
+    super(fullName, birthYear); // Call the parent constructor
+    this.course = course;
+  }
+
+  introduce() {
+    console.log(`My name is ${this.fName} and I study ${this.course}`);
+  }
+  calcAge() {
+    console.log(`I'm ${2012 - this.bYear} years old, but as a student I feel more like ${2012 - this.bYear + 10}`);
+  }
+};
+
+const martha = new StudentCl('Martha Jones', 1990, 'Computer Science');
+StudentCl.hey();
+martha.introduce();
+martha.calcAge();
