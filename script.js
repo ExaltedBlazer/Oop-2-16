@@ -304,7 +304,7 @@ tesla.chargeBattery(90);
 console.log(tesla);
 tesla.accelerate();
 tesla.brake();
-*/
+
 
 class PersonCl {
   constructor(fullName, birthYear) {
@@ -312,6 +312,7 @@ class PersonCl {
     this.bYear = birthYear;
   }
 
+ 
   //Methods will be added to .prototype property
   calcAge() {
     console.log(2012 - this.bYear);
@@ -361,3 +362,89 @@ const martha = new StudentCl('Martha Jones', 1990, 'Computer Science');
 StudentCl.hey();
 martha.introduce();
 martha.calcAge();
+
+
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
+
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
+
+const steven = Object.create(PersonProto);
+
+const StudentProto = Object.create(PersonProto);
+StudentProto.init = function (firstName, birthYear, course) {
+  PersonProto.init.call(this, firstName, birthYear);
+  this.course = course;
+};
+
+const jay = Object.create(StudentProto);
+jay.init('Jay', 2000, 'Computer Science');
+jay.calcAge();
+console.log(jay);
+*/
+
+// 1. Public fields
+// 2. Private fields
+// 3. Public methods
+// 4. Private methods
+// Static version of all of the above
+
+class Account {
+  locale = navigator.language; // Public field
+  bank = 'bankist'; // Public field
+  // #movements = []; // Private field
+  // #pin; // Private field
+
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    this.pin = pin;
+    this.movements = [];
+    this.locale = navigator.language;
+
+    console.log(`Thanks for opening an account, ${owner}`);
+  }
+
+  // Public interface
+  deposit(val) {
+    this.movements.push(val);
+  }
+
+  withdraw(val) {
+    this.deposit(-val);
+  }
+
+  applyLoan(val) {
+    if (this._approveLoan(val)) {
+      this.deposit(val);
+      console.log(`Loan approved`);
+    }
+  }
+
+  _approveLoan(val) {
+    return true;
+  }
+
+  requestLoan(val) {
+    if (this._approveLoan(val)) {
+      this.deposit(val);
+      console.log(`Loan approved`);
+    }
+  }
+}
+
+const acc1 = new Account('Jonas', 'EUR', 1111);
+
+// acc1.deposit(250);
+// acc1.withdraw(140);
+// acc1.requestLoan(1000);
+// acc1._approveLoan(1000);
+
+console.log(acc1.pin);
+console.log(acc1.movements); 
