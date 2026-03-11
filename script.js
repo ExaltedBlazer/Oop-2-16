@@ -387,7 +387,7 @@ const jay = Object.create(StudentProto);
 jay.init('Jay', 2000, 'Computer Science');
 jay.calcAge();
 console.log(jay);
-*/
+
 
 // 1. Public fields
 // 2. Private fields
@@ -398,26 +398,33 @@ console.log(jay);
 class Account {
   locale = navigator.language; // Public field
   bank = 'bankist'; // Public field
-  // #movements = []; // Private field
-  // #pin; // Private field
+  #movements = []; // Private field
+  #pin; // Private field
 
   constructor(owner, currency, pin) {
     this.owner = owner;
     this.currency = currency;
-    this.pin = pin;
-    this.movements = [];
-    this.locale = navigator.language;
+    this.#pin = pin;
+    // this.movements = [];
+    // this.locale = navigator.language;
 
     console.log(`Thanks for opening an account, ${owner}`);
   }
 
   // Public interface
+  getMovements() {
+    return this.#movements;
+    // not chainable
+  }
+
   deposit(val) {
-    this.movements.push(val);
+    this.#movements.push(val);
+    return this;
   }
 
   withdraw(val) {
     this.deposit(-val);
+    return this;
   }
 
   applyLoan(val) {
@@ -427,15 +434,16 @@ class Account {
     }
   }
 
-  _approveLoan(val) {
+  #approveLoan(val) {
     return true;
   }
 
   requestLoan(val) {
-    if (this._approveLoan(val)) {
+    if (this.#approveLoan(val)) {
       this.deposit(val);
       console.log(`Loan approved`);
     }
+    return this;
   }
 }
 
@@ -444,7 +452,72 @@ const acc1 = new Account('Jonas', 'EUR', 1111);
 // acc1.deposit(250);
 // acc1.withdraw(140);
 // acc1.requestLoan(1000);
-// acc1._approveLoan(1000);
+//acc1.#approveLoan(1000);
 
-console.log(acc1.pin);
-console.log(acc1.movements); 
+acc1
+  .deposit(250)
+  .withdraw(140)
+  .withdraw(100)
+  .requestLoan(1000)
+  .withdraw(200)
+  .getMovements();
+
+console.log(acc1);
+console.log(acc1.getMovements()); 
+*/
+
+class CarCl {
+  constructor(make, speed) {
+    this.carName = make;
+    this.carSpeed = speed;
+  }
+
+  accelerate() {
+    this.carSpeed += 10
+    const currentSpeed = `The ${this.carName} current speed is ${this.carSpeed}mph`;
+    console.log(currentSpeed);
+  };
+
+  brake() {
+    this.carSpeed -= 5
+    const currentBrakeSpeed = `The ${this.carName} brake speed is ${this.carSpeed}mph`;
+    console.log(currentBrakeSpeed);
+    return this;
+  };
+
+  get speedUS() {
+    return this.carSpeed / 1.6
+  }
+
+  set speedUS(speed) {
+    this.carSpeed = speed * 1.6
+  }
+}
+
+class EVCl extends CarCl {
+  #charge;
+  constructor(make, speed, charge) {
+    super(make, speed);
+    this.#charge = charge;
+  };
+
+  chargeBattery(chargeTo) {
+    this.#charge = chargeTo;
+    return this;
+  };
+
+  accelerate() {
+    this.carSpeed += 20;
+    this.#charge--;
+    console.log(`${this.carName} is going at ${this.carSpeed}mph, with a charge of ${this.#charge}%`);
+    return this;
+  };
+};
+
+const rivian = new EVCl('Rivian', 120, 23);
+console.log(rivian);
+rivian.accelerate().accelerate().accelerate().brake().chargeBattery(50).accelerate();
+
+console.log(rivian.chargeBattery(100));
+
+console.log(rivian.speedUS);
